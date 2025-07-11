@@ -8,47 +8,46 @@ import sqlite3
 from pathlib import Path
 
 def connect_to_database():
-    """TODO: Connect to SQLite database"""
-    # Hint: Use sqlite3.connect('jokegen.db')
-    # Return the connection object
-    pass
+    connection = sqlite3.connect('jokegen.db')
+    return connection
 
 def create_jokes_table(connection):
     """TODO: Create the jokes table"""
     cursor = connection.cursor()
-    
-    # TODO: Write your CREATE TABLE SQL here
-    # Table should have these columns:
-    # - id (INTEGER PRIMARY KEY)
-    # - joke_number (INTEGER) 
-    # - joke_text (TEXT)
-    # - audio_file_path (TEXT)
-    
-    # Example structure:
-    # CREATE TABLE jokes (
-    #     id INTEGER PRIMARY KEY,
-    #     joke_number INTEGER,
-    #     joke_text TEXT,
-    #     audio_file_path TEXT
-    # )
+    cursor.execute('''
+    CREATE TABLE jokes (
+        id INTEGER PRIMARY KEY,
+        joke_number INTEGER,
+        joke_text TEXT,
+        audio_file_path TEXT
+    )
+''')
+   
     
     connection.commit()
 
 def read_jokes_from_file(file_path='../base.txt'):
     """TODO: Read jokes from the text file"""
     jokes = []
-    
-    # TODO: 
-    # 1. Open the file for reading
-    # 2. Read each line
-    # 3. Remove trailing whitespace and tab characters
-    # 4. Add non-empty lines to the jokes list
-    
+    with open(file_path, 'r') as file:
+        for line in file:
+            line = line.strip()
+            if line:
+                jokes.append(line)
+
     return jokes
 
 def get_audio_files(audio_dir='../Joke audio'):
     """TODO: Get list of audio files"""
     audio_files = {}
+    audio_dir = Path(audio_dir)
+    mp3_files = list(audio_dir.glob('*.mp3'))
+    for mp3_file in mp3_files:
+        filename = mp3_file.stem  # Remove extension
+        if filename.startswith('joke'):
+            joke_number = int(filename[4:])  # Remove 'joke' prefix
+            audio_files[joke_number] = str(mp3_file)
+    return audio_files
     
     # TODO:
     # 1. Use Path(audio_dir) to get the directory
@@ -57,17 +56,14 @@ def get_audio_files(audio_dir='../Joke audio'):
     #    (e.g., "joke42.mp3" -> 42)
     # 4. Store in dict: {joke_number: file_path}
     
-    return audio_files
 
 def insert_joke(connection, joke_number, joke_text, audio_file_path):
-    """TODO: Insert a joke into the database"""
     cursor = connection.cursor()
+    cursor.execute('''
+        INSERT INTO jokes (joke_number, joke_text, audio_file_path) 
+        VALUES (?, ?, ?)
+    ''', (joke_number, joke_text, audio_file_path))
     
-    # TODO: Write INSERT statement
-    # INSERT INTO jokes (joke_number, joke_text, audio_file_path) 
-    # VALUES (?, ?, ?)
-    
-    pass
 
 def populate_database(connection):
     """TODO: Populate the database with all jokes"""
