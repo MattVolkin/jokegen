@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+h1 {
+    text-align: center;
+}
+#joke-display {
+    margin: 2em 0;
+    font-size: 1.2em;
+    min-height: 3em;
+    text-align: center;
+}
+#search-form {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+#search-input {
+    flex: 1;
+    padding: 0.5em;
+    font-size: 1em;
+}
+button {
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+}
+#search-results {
+    margin-top: 1em;
+} 
