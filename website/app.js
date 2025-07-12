@@ -26,4 +26,6 @@ searchForm.addEventListener('submit', async (e) => {
     
     // TODO: Fetch search results from backend
     // TODO: Display search results
-}); 
+});
+
+// TODO: Add any additional functionality you want 
