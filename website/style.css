@@ -1,41 +1,98 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f9f9f9;
+/* TODO: Add your own CSS reset/normalize */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
-.container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 2em;
+
+/* TODO: Choose your own fonts and colors */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+/* TODO: Style your header */
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* TODO: Style your main content area */
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* TODO: Style your joke section */
+#joke-section {
+    background: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-h1 {
-    text-align: center;
-}
+
 #joke-display {
-    margin: 2em 0;
-    font-size: 1.2em;
-    min-height: 3em;
-    text-align: center;
+    min-height: 100px;
+    margin-bottom: 1rem;
+    /* TODO: Add your own styling for joke text */
 }
-#search-form {
-    display: flex;
-    gap: 0.5em;
-    margin-bottom: 1em;
-}
-#search-input {
-    flex: 1;
-    padding: 0.5em;
-    font-size: 1em;
-}
-button {
-    padding: 0.5em 1em;
-    font-size: 1em;
+
+#random-joke-btn {
+    /* TODO: Style your button */
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     cursor: pointer;
 }
+
+/* TODO: Style your search section */
+#search-section {
+    background: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#search-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#search-input {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* TODO: Style your search results */
 #search-results {
-    margin-top: 1em;
+    /* TODO: Add styling for search results */
+}
+
+/* TODO: Style your audio section */
+#audio-section {
+    /* TODO: Add styling for audio player */
+}
+
+/* TODO: Style your footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    margin-top: 2rem;
+}
+
+/* TODO: Add responsive design */
+@media (max-width: 768px) {
+    /* TODO: Add mobile styles */
 } 

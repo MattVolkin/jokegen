@@ -7,21 +7,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <!-- TODO: Add your own header/navigation -->
+    <header>
         <h1>JokeGen</h1>
-        <div id="joke-display">
-            <!-- Joke will appear here -->
-        </div>
-        <button id="random-joke-btn">Get Random Joke</button>
-        <form id="search-form">
-            <input type="text" id="search-input" placeholder="Search jokes...">
-            <button type="submit">Search</button>
-        </form>
-        <div id="search-results">
-            <!-- Search results will appear here -->
-        </div>
-        <audio id="joke-audio" controls style="display:none;"></audio>
-    </div>
+    </header>
+
+    <main>
+        <!-- TODO: Design your joke display area -->
+        <section id="joke-section">
+            <div id="joke-display">
+                <!-- TODO: Style how jokes appear here -->
+            </div>
+            <button id="random-joke-btn">Get Random Joke</button>
+        </section>
+
+        <!-- TODO: Design your search interface -->
+        <section id="search-section">
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Search jokes...">
+                <button type="submit">Search</button>
+            </form>
+            <div id="search-results">
+                <!-- TODO: Style how search results appear -->
+            </div>
+        </section>
+
+        <!-- TODO: Style your audio player -->
+        <section id="audio-section">
+            <audio id="joke-audio" controls style="display:none;"></audio>
+        </section>
+    </main>
+
+    <!-- TODO: Add your own footer -->
+    <footer>
+        <!-- Add footer content -->
+    </footer>
+
     <script src="app.js"></script>
 </body>
 </html> 
