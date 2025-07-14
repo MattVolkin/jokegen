@@ -9,14 +9,14 @@ from flask_cors import CORS
 # Method 1: Add path and import
 import sys
 import os
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Database'))
 from database_skeleton import get_random_joke, search_jokes, get_joke_by_number
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)  # Allow frontend to make requests
+CORS(app) 
 
-# TODO: Set the path to your database file
 DATABASE_PATH = '../jokegen.db'
 
 def get_db_connection():
@@ -26,9 +26,12 @@ def get_db_connection():
 @app.route('/random', methods=['GET'])
 def get_random_joke_endpoint():
     try:
+        print("Fetching random joke...")
         joke = get_random_joke(get_db_connection())
+        print("Joke fetched:", joke)
         return jsonify({'joke_text': joke[2],'audio_file_path':joke[3]})
     except Exception as e:
+        print("Error in /random:", e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/search', methods=['GET'])

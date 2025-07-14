@@ -228,3 +228,68 @@
 
 ---
 This reference covers the most common HTML elements you'll need for your joke website! 
+
+---
+
+## 1. **Update your HTML (`index.html`):**
+
+Add a checkbox for audio autoplay, for example just above or below the random joke button:
+
+```html
+<label>
+  <input type="checkbox" id="autoplay-audio" checked>
+  Play audio automatically
+</label>
+```
+
+Place this near your random joke button, e.g.:
+```html
+<button id="random-joke-btn">Get Random Joke</button>
+<label style="margin-left: 1em;">
+  <input type="checkbox" id="autoplay-audio" checked>
+  Play audio automatically
+</label>
+```
+
+---
+
+## 2. **Update your JavaScript (`app.js`):**
+
+Get a reference to the checkbox at the top:
+```javascript
+const autoplayCheckbox = document.getElementById('autoplay-audio');
+```
+
+Update your random joke event handler to check the checkbox before playing audio:
+```javascript
+randomJokeBtn.addEventListener('click', async () => {
+    try {
+        jokeDisplay.textContent = 'Loading...';
+        const response = await fetch(`${API_BASE_URL}/random`);
+        const joke = await response.json();
+        jokeDisplay.textContent = joke.joke_text;
+
+        if (joke.audio_file_path) {
+            jokeAudio.src = joke.audio_file_path;
+            jokeAudio.style.display = 'block';
+            // Only play if the checkbox is checked
+            if (autoplayCheckbox.checked) {
+                jokeAudio.play().catch((err) => {
+                    console.warn('Audio playback was prevented:', err);
+                });
+            }
+        } else {
+            jokeAudio.style.display = 'none';
+            jokeAudio.src = '';
+        }
+    } catch (error) {
+        jokeDisplay.textContent = 'Error loading joke';
+        console.error('Error:', error);
+    }
+});
+```
+
+---
+
+**Now users can control whether audio plays automatically!**  
+Let me know if you want this for search results as well. 
