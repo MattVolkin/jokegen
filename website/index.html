@@ -15,10 +15,10 @@
     <main>
         <!-- TODO: Design your joke display area -->
         <section id="joke-section">
-            <div id="joke-display">
-                <!-- TODO: Style how jokes appear here -->
-            </div>
+            <div id="joke-display"></div>
+            <audio id="joke-audio" controls style="display:block"></audio>
             <button id="random-joke-btn">Get Random Joke</button>
+            <input type="checkbox" id="autoplay-audio"> Autoplay audio
         </section>
 
         <!-- TODO: Design your search interface -->
@@ -30,11 +30,8 @@
             <div id="search-results">
                 <!-- TODO: Style how search results appear -->
             </div>
-        </section>
-
-        <!-- TODO: Style your audio player -->
-        <section id="audio-section">
-            <audio id="joke-audio" controls style="display:none;"></audio>
+            <input type="number" id="joke-id-input" placeholder="Enter joke ID">
+            <button id="joke-id-btn">Find Joke by ID</button>
         </section>
     </main>
 
@@ -45,4 +42,4 @@
 
     <script src="app.js"></script>
 </body>
-</html> 
+</html>
