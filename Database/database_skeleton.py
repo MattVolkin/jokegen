@@ -4,11 +4,15 @@ JokeGen Database Skeleton - Learning Project
 Fill in the TODO sections to build your database skills
 """
 
-import sqlite3
 from pathlib import Path
+import sqlite3
 
 def connect_to_database():
-    connection = sqlite3.connect('jokegen.db')
+    # Place the database file in the backend folder
+    backend_dir = Path(__file__).parent.parent / 'backend'
+    backend_dir.mkdir(exist_ok=True)
+    db_path = backend_dir / 'jokegen.db'
+    connection = sqlite3.connect(str(db_path))
     return connection
 
 def create_jokes_table(connection):
@@ -26,37 +30,28 @@ def create_jokes_table(connection):
     
     connection.commit()
 
-def read_jokes_from_file(file_path='../base.txt'):
-    """TODO: Read jokes from the text file"""
-    # Get the directory where this script is located
+def read_jokes_from_file(file_path=None):
+    """Read jokes from the cleaned text file, grouping every two lines as one joke."""
     script_dir = Path(__file__).parent
-    # Construct absolute path to base.txt
-    base_path = script_dir.parent / 'base.txt'
-    
+    base_path = script_dir.parent / 'clean_base.txt'
     jokes = []
-    with open(base_path, 'r') as file:
-        for line in file:
-            line = line.strip()
-            if line:
-                jokes.append(line)
-
+    with open(base_path, 'r', encoding='utf-8') as file:
+        lines = [line.strip() for line in file if line.strip()]
+        # Group every two lines as one joke
+        for i in range(0, len(lines), 2):
+            setup = lines[i]
+            punchline = lines[i+1] if i+1 < len(lines) else ''
+            jokes.append(f"{setup}\n{punchline}")
     return jokes
 
 def get_audio_files(audio_dir='../Joke audio'):
-    """TODO: Get list of audio files"""
-    # Get the directory where this script is located
-    script_dir = Path(__file__).parent
-    # Construct absolute path to Joke audio directory
-    audio_dir = script_dir.parent / 'Joke audio'
-    audio_files = {}
+    audio_map = {}
     audio_dir = Path(audio_dir)
-    mp3_files = list(audio_dir.glob('*.mp3'))
-    for mp3_file in mp3_files:
-        filename = mp3_file.stem  # Remove extension
-        if filename.startswith('joke'):
-            joke_number = int(filename[4:])  # Remove 'joke' prefix
-            audio_files[joke_number] = str(mp3_file)
-    return audio_files
+    for audio_file in audio_dir.glob('joke*.mp3'):
+        # Extract the joke number from the filename
+        num = int(audio_file.stem.replace('joke', ''))
+        audio_map[num] = str(audio_file)
+    return audio_map
     
 
 def insert_joke(connection, joke_number, joke_text, audio_file_path):
@@ -134,4 +129,4 @@ def main():
         print(f"Error: {e}")
 
 if __name__ == '__main__':
-    main() 
+    main()
