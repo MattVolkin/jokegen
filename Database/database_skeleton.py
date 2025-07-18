@@ -30,18 +30,34 @@ def create_jokes_table(connection):
     
     connection.commit()
 
-def read_jokes_from_file(file_path=None):
-    """Read jokes from the cleaned text file, grouping every two lines as one joke."""
-    script_dir = Path(__file__).parent
-    base_path = script_dir.parent / 'clean_base.txt'
+from pathlib import Path
+
+def read_jokes_from_file(file_path="clean_base.txt", verbose=False):
+    """Read jokes from the cleaned text file, grouping every section separated by a blank line as one joke."""
+    if file_path is None:
+        script_dir = Path(__file__).parent
+        file_path = script_dir.parent / 'clean_base.txt'
+    
     jokes = []
-    with open(base_path, 'r', encoding='utf-8') as file:
-        lines = [line.strip() for line in file if line.strip()]
-        # Group every two lines as one joke
-        for i in range(0, len(lines), 2):
-            setup = lines[i]
-            punchline = lines[i+1] if i+1 < len(lines) else ''
-            jokes.append(f"{setup}\n{punchline}")
+    joke = []
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            if line.strip() == '':
+                if joke:  # Avoid adding empty jokes
+                    jokes.append(joke)
+                    if verbose:
+                        print("Joke added:", joke)
+                    joke = []
+            else:
+                joke.append(line.strip())
+
+    # Catch the last joke if the file doesn't end in a blank line
+    if joke:
+        jokes.append(joke)
+        if verbose:
+            print("Joke added:", joke)
+
     return jokes
 
 def get_audio_files(audio_dir='../Joke audio'):
@@ -65,7 +81,7 @@ def insert_joke(connection, joke_number, joke_text, audio_file_path):
 def populate_database(connection):
     """TODO: Populate the database with all jokes"""
     print("Reading jokes from file...")
-    jokes = read_jokes_from_file()
+    jokes = read_jokes_from_file(verbose=True)
     print(f"Found {len(jokes)} jokes")
     
     print("Scanning audio files...")
