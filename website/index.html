@@ -9,7 +9,7 @@
 <body>
     <!-- TODO: Add your own header/navigation -->
     <header>
-        <h1>JokeGen</h1>
+        <h1>Dad Joke Generator</h1>
     </header>
 
     <main>
@@ -26,12 +26,15 @@
             <form id="search-form">
                 <input type="text" id="search-input" placeholder="Search jokes...">
                 <button type="submit">Search</button>
+            
             </form>
             <div id="search-results">
+                <!-- Search results will be displayed here -->
+                <button id="show-more-btn" style="display: none;">Show More Results</button>
+
+            </div>
                 <!-- TODO: Style how search results appear -->
             </div>
-            <input type="number" id="joke-id-input" placeholder="Enter joke ID">
-            <button id="joke-id-btn">Find Joke by ID</button>
         </section>
     </main>
 

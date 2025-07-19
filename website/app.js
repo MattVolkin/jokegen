@@ -13,6 +13,12 @@ const jokeAudio = document.getElementById('joke-audio');
 const autoplayCheckbox = document.getElementById('autoplay-audio');
 const jokeIdInput = document.getElementById('joke-id-input');
 const jokeIdBtn = document.getElementById('joke-id-btn');
+const showMoreBtn = document.getElementById('show-more-btn');
+
+let searchResultsData = [];  // Store all jokes returned by search
+let visibleCount = 0;        // Track how many results are currently shown
+const RESULTS_PER_BATCH = 5; // Number of jokes shown per click
+
 
 // Helper function to display a joke and handle audio
 function displayJoke(joke) {
@@ -63,25 +69,20 @@ searchForm.addEventListener('submit', async (e) => {
     try {
         const response = await fetch(`${API_BASE_URL}/search?term=${encodeURIComponent(term)}`);
         const data = await response.json();
-        if (data.error) {
-            searchResults.textContent = 'Error: ' + data.error;
-        } else if (data.jokes && data.jokes.length > 0) {
-            searchResults.innerHTML = '';
-            data.jokes.forEach(joke => {
-                const div = document.createElement('div');
-                div.className = 'search-result';
-                div.textContent = joke.joke_text;
-                if (joke.audio_file_path) {
-                    const audio = document.createElement('audio');
-                    audio.src = joke.audio_file_path;
-                    audio.controls = true;
-                    div.appendChild(audio);
-                }
-                searchResults.appendChild(div);
-            });
-        } else {
-            searchResults.textContent = 'No jokes found.';
-        }
+if (data.error) {
+    searchResults.textContent = 'Error: ' + data.error;
+    showMoreBtn.style.display = 'none';
+} else if (data.jokes && data.jokes.length > 0) {
+    searchResultsData = data.jokes;
+    visibleCount = 0;
+    searchResults.innerHTML = '';
+    showMoreBtn.style.display = 'block';
+    renderSearchBatch();
+} else {
+    searchResults.textContent = 'No jokes found.';
+    showMoreBtn.style.display = 'none';
+}
+
     } catch (err) {
         searchResults.textContent = 'Failed to fetch search results.';
     }
@@ -109,5 +110,30 @@ jokeIdBtn.addEventListener('click', async () => {
         jokeDisplay.textContent = 'Failed to fetch joke by ID.';
     }
 });
+
+function renderSearchBatch() {
+    const end = Math.min(visibleCount + RESULTS_PER_BATCH, searchResultsData.length);
+    for (let i = visibleCount; i < end; i++) {
+        const joke = searchResultsData[i];
+        const div = document.createElement('div');
+        div.className = 'search-result';
+        div.textContent = joke.joke_text;
+        if (joke.audio_file_path) {
+            const audio = document.createElement('audio');
+            audio.src = joke.audio_file_path;
+            audio.controls = true;
+            div.appendChild(audio);
+        }
+        searchResults.appendChild(div);
+    }
+    visibleCount = end;
+
+    // Hide button if all results are shown
+    if (visibleCount >= searchResultsData.length) {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+showMoreBtn.addEventListener('click', renderSearchBatch);
 
 // TODO: Add any additional functionality you want

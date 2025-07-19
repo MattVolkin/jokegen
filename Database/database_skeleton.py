@@ -30,43 +30,43 @@ def create_jokes_table(connection):
     
     connection.commit()
 
-from pathlib import Path
-
-def read_jokes_from_file(file_path="clean_base.txt", verbose=False):
-    """Read jokes from the cleaned text file, grouping every section separated by a blank line as one joke."""
+def read_jokes_from_file(file_path=None, verbose=False):
+    """
+    Read jokes from a cleaned text file.
+    Each joke is separated by a blank line.
+    Returns a list of jokes, where each joke is a list of lines.
+    """
+    # Use default path if none is provided
     if file_path is None:
         script_dir = Path(__file__).parent
-        file_path = script_dir.parent / 'clean_base.txt'
-    
-    jokes = []
-    joke = []
+        file_path = script_dir / 'clean_base.txt'
+    else:
+        file_path = Path(file_path)
 
-    with open(file_path, 'r', encoding='utf-8') as file:
-        for line in file:
-            if line.strip() == '':
-                if joke:  # Avoid adding empty jokes
-                    jokes.append(joke)
-                    if verbose:
-                        print("Joke added:", joke)
-                    joke = []
-            else:
-                joke.append(line.strip())
+    # Check if file exists
+    if not file_path.exists():
+        print(f"Error: Joke file not found at: '{file_path}'")
+        return []
+    with file_path.open('r', encoding='utf-8') as file:
+        file_content = file.read()
+        print(file_content)
+        lines = file_content.split('\n\n')
+    return lines
 
-    # Catch the last joke if the file doesn't end in a blank line
-    if joke:
-        jokes.append(joke)
-        if verbose:
-            print("Joke added:", joke)
 
-    return jokes
+def get_audio_files():
+    audio_map = []
+    script_dir = Path(__file__).parent
+    audio_dir = script_dir.parent / 'Joke audio'
+    if not audio_dir.exists():
+        print(f"Error: Audio directory not found at: '{audio_dir}'")
+        return audio_map
+    index =0
 
-def get_audio_files(audio_dir='../Joke audio'):
-    audio_map = {}
-    audio_dir = Path(audio_dir)
     for audio_file in audio_dir.glob('joke*.mp3'):
-        # Extract the joke number from the filename
-        num = int(audio_file.stem.replace('joke', ''))
-        audio_map[num] = str(audio_file)
+        if audio_file.is_file():
+            audio_map.append((index, str(audio_file)))
+            index += 1
     return audio_map
     
 
@@ -78,27 +78,48 @@ def insert_joke(connection, joke_number, joke_text, audio_file_path):
     ''', (joke_number, joke_text, audio_file_path))
     
 
+from pathlib import Path
+
+import re
+from pathlib import Path
+
 def populate_database(connection):
-    """TODO: Populate the database with all jokes"""
+    """Populate the database with jokes that have matching audio files based on ID."""
+    script_dir = Path(__file__).parent
+    jokes_path = script_dir.parent / 'Database' / 'clean_base.txt'
+    audio_dir = script_dir.parent / 'Joke audio'
+
     print("Reading jokes from file...")
-    jokes = read_jokes_from_file(verbose=True)
+    jokes = read_jokes_from_file(jokes_path, verbose=True)
     print(f"Found {len(jokes)} jokes")
-    
+
     print("Scanning audio files...")
-    audio_files = get_audio_files()
-    print(f"Found {len(audio_files)} audio files")
-    
+    audio_map = {}
+
+    audio_pattern = re.compile(r'joke(\d+)\.mp3')
+    for audio_file in audio_dir.glob('joke*.mp3'):
+        match = audio_pattern.match(audio_file.name)
+        if match:
+            joke_id = int(match.group(1))
+            audio_map[joke_id] = str(audio_file.resolve())
+
+    print(f"Found {len(audio_map)} audio files")
+
     print("Creating table...")
     create_jokes_table(connection)
-    
-    print("Inserting jokes...")
-    for index, joke in enumerate(jokes):
-        # Check if audio file exists for this joke
-        audio_file_path = audio_files.get(index, None)
-        insert_joke(connection, index, joke, audio_file_path)
-    
+
+    print("Inserting jokes with audio...")
+    inserted_count = 0
+    for joke_id, joke in enumerate(jokes):
+        if joke_id in audio_map:
+            insert_joke(connection, joke_id, joke, audio_map[joke_id])
+            inserted_count += 1
+        else:
+            print(f"⚠️ Skipping joke #{joke_id}: No matching audio")
+
     connection.commit()
-    print("Database populated!")
+    print(f"✅ Database populated with {inserted_count} jokes that have audio")
+
 
 def get_random_joke(connection):
     """TODO: Get a random joke from the database"""
