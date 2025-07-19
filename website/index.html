@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JokeGen</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dad Joke Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>Dad Joke Generator</h1>
-    </header>
+  <header>
+    <h1>Dad Joke Generator</h1>
+  </header>
 
-    <main>
-        <!-- Joke display section -->
-        <section id="joke-section">
-            <div id="joke-display"></div>
-            <audio id="joke-audio" controls style="display:block"></audio>
-            <button id="random-joke-btn">Get Random Joke</button>
-            <input type="checkbox" id="autoplay-audio"> Autoplay audio
-        </section>
+  <main>
+    <!-- Random Joke Section -->
+    <section id="joke-section">
+      <h2>Random Joke</h2>
+      <div id="joke-display" class="joke-box">Generated Joke Text</div>
+      <audio id="joke-audio" controls style="display: none;"></audio>
+      <button id="random-joke-btn">Get Random Joke</button>
+      <label><input type="checkbox" id="autoplay-audio"> Autoplay audio</label>
+    </section>
 
-        <!-- Search section -->
-        <section id="search-section">
-            <form id="search-form">
-                <input type="text" id="search-input" placeholder="Search jokes...">
-                <button type="submit">Search</button>
-            </form>
+    <!-- Favorites Label (optional) -->
+    <section>
+      <h2>Favorites</h2>
+      <div id="favorites-section"></div>
+    </section>
 
-            <div id="search-results">
-                <!-- Search results will be inserted here -->
-            </div>
+    <!-- Search Section -->
+    <section id="search-section">
+      <h2>Search</h2>
+      <form id="search-form">
+        <input type="text" id="search-input" placeholder="Search jokes..." />
+        <button type="submit">Search</button>
+      </form>
 
-            <!-- Show more results button -->
-            <button id="show-more-btn" style="display:none;">Show More Results</button>
-        </section>
-    </main>
+      <div id="search-results"></div>
+      <button id="show-more-btn" style="display: none;">Show More Results</button>
+    </section>
+  </main>
 
-    <!-- Footer -->
-    <footer>
-        <!-- Add footer content here -->
-    </footer>
+  <footer>
+    <p>&copy; 2025 JokeGen</p>
+  </footer>
 
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
-</html>
+
+

@@ -14,25 +14,122 @@ const autoplayCheckbox = document.getElementById('autoplay-audio');
 const jokeIdInput = document.getElementById('joke-id-input');
 const jokeIdBtn = document.getElementById('joke-id-btn');
 const showMoreBtn = document.getElementById('show-more-btn');
+const favoritesSection = document.getElementById('favorites-section');
 
 let searchResultsData = [];  // Store all jokes returned by search
 let visibleCount = 0;        // Track how many results are currently shown
 const RESULTS_PER_BATCH = 5; // Number of jokes shown per click
 
+function toggleFavorite(joke, heartElement) {
+    const isFavorited = heartElement.classList.toggle('favorited');
+    heartElement.style.color = isFavorited ? 'red' : 'black';
+
+    const existing = favoritesSection.querySelector(`[data-id="${joke.id}"]`);
+
+    if (isFavorited && !existing) {
+        const fav = document.createElement('div');
+        fav.className = 'favorite-item';
+        fav.dataset.id = joke.id;
+        fav.style.display = 'flex';
+        fav.style.alignItems = 'center';
+        fav.style.justifyContent = 'space-between';
+
+        const jokeText = document.createElement('span');
+        jokeText.textContent = joke.joke_text;
+        jokeText.style.flex = '1';
+
+        const heart = document.createElement('span');
+        heart.textContent = '♥';
+        heart.style.cursor = 'pointer';
+        heart.style.fontSize = '1.5rem';
+        heart.style.color = 'red';
+        heart.style.marginLeft = '1rem';
+
+        heart.addEventListener('click', () => toggleFavorite(joke, heart));
+
+        fav.appendChild(jokeText);
+        fav.appendChild(heart);
+        favoritesSection.appendChild(fav);
+    }
+
+    if (!isFavorited && existing) {
+        existing.remove();
+    }
+}
 
 // Helper function to display a joke and handle audio
 function displayJoke(joke) {
-    jokeDisplay.innerHTML = (joke.joke_text || 'No joke found.').replace(/\n/g, '<br>');
-    jokeAudio.style.display = 'block';
+    jokeDisplay.innerHTML = '';
+
+    const jokeText = document.createElement('p');
+    jokeText.innerHTML = (joke.joke_text || 'No joke found.').replace(/\n/g, '<br>');
+    jokeDisplay.appendChild(jokeText);
+
     if (joke.audio_file_path) {
-        jokeAudio.src = joke.audio_file_path;
-        jokeAudio.load();
-        if (autoplayCheckbox.checked) {
-            jokeAudio.play();
+        const mediaContainer = document.createElement('div');
+        mediaContainer.style.display = 'flex';
+        mediaContainer.style.alignItems = 'center';
+        mediaContainer.style.justifyContent = 'space-between';
+
+        const audio = document.createElement('audio');
+        audio.src = joke.audio_file_path;
+        audio.controls = true;
+        audio.style.flex = '1';
+
+        const heart = document.createElement('span');
+        heart.textContent = '♥';
+        heart.style.cursor = 'pointer';
+        heart.style.fontSize = '1.5rem';
+        heart.style.color = 'black';
+        heart.style.marginLeft = '1rem';
+        heart.addEventListener('click', () => toggleFavorite(joke, heart));
+
+        mediaContainer.appendChild(audio);
+        mediaContainer.appendChild(heart);
+        jokeDisplay.appendChild(mediaContainer);
+    }
+}
+
+function renderSearchBatch() {
+    const end = Math.min(visibleCount + RESULTS_PER_BATCH, searchResultsData.length);
+    for (let i = visibleCount; i < end; i++) {
+        const joke = searchResultsData[i];
+        const div = document.createElement('div');
+        div.className = 'search-result';
+
+        const jokeText = document.createElement('p');
+        jokeText.textContent = joke.joke_text;
+        div.appendChild(jokeText);
+
+        if (joke.audio_file_path) {
+            const mediaContainer = document.createElement('div');
+            mediaContainer.style.display = 'flex';
+            mediaContainer.style.alignItems = 'center';
+            mediaContainer.style.justifyContent = 'space-between';
+
+            const audio = document.createElement('audio');
+            audio.src = joke.audio_file_path;
+            audio.controls = true;
+            audio.style.flex = '1';
+
+            const heart = document.createElement('span');
+            heart.textContent = '♥';
+            heart.style.cursor = 'pointer';
+            heart.style.fontSize = '1.5rem';
+            heart.style.color = 'black';
+            heart.style.marginLeft = '1rem';
+            heart.addEventListener('click', () => toggleFavorite(joke, heart));
+
+            mediaContainer.appendChild(audio);
+            mediaContainer.appendChild(heart);
+            div.appendChild(mediaContainer);
         }
-    } else {
-        jokeAudio.src = '';
-        jokeAudio.load();
+
+        searchResults.appendChild(div);
+    }
+    visibleCount = end;
+    if (visibleCount >= searchResultsData.length) {
+        showMoreBtn.style.display = 'none';
     }
 }
 
@@ -69,24 +166,27 @@ searchForm.addEventListener('submit', async (e) => {
     try {
         const response = await fetch(`${API_BASE_URL}/search?term=${encodeURIComponent(term)}`);
         const data = await response.json();
-if (data.error) {
-    searchResults.textContent = 'Error: ' + data.error;
-    showMoreBtn.style.display = 'none';
-} else if (data.jokes && data.jokes.length > 0) {
-    searchResultsData = data.jokes;
-    visibleCount = 0;
-    searchResults.innerHTML = '';
-    showMoreBtn.style.display = 'block';
-    renderSearchBatch();
-} else {
-    searchResults.textContent = 'No jokes found.';
-    showMoreBtn.style.display = 'none';
-}
-
+        if (data.error) {
+            searchResults.textContent = 'Error: ' + data.error;
+            showMoreBtn.style.display = 'none';
+        } else if (data.jokes && data.jokes.length > 0) {
+            searchResultsData = data.jokes;
+            visibleCount = 0;
+            searchResults.innerHTML = '';
+            showMoreBtn.style.display = 'block';
+            renderSearchBatch();
+        } else {
+            searchResults.textContent = 'No jokes found.';
+            showMoreBtn.style.display = 'none';
+        }
     } catch (err) {
         searchResults.textContent = 'Failed to fetch search results.';
+        showMoreBtn.style.display = 'none';
     }
 });
+
+// Add click event listener for show more button
+showMoreBtn.addEventListener('click', renderSearchBatch);
 
 // Add click event listener for joke by ID button
 jokeIdBtn.addEventListener('click', async () => {
@@ -110,30 +210,5 @@ jokeIdBtn.addEventListener('click', async () => {
         jokeDisplay.textContent = 'Failed to fetch joke by ID.';
     }
 });
-
-function renderSearchBatch() {
-    const end = Math.min(visibleCount + RESULTS_PER_BATCH, searchResultsData.length);
-    for (let i = visibleCount; i < end; i++) {
-        const joke = searchResultsData[i];
-        const div = document.createElement('div');
-        div.className = 'search-result';
-        div.textContent = joke.joke_text;
-        if (joke.audio_file_path) {
-            const audio = document.createElement('audio');
-            audio.src = joke.audio_file_path;
-            audio.controls = true;
-            div.appendChild(audio);
-        }
-        searchResults.appendChild(div);
-    }
-    visibleCount = end;
-
-    // Hide button if all results are shown
-    if (visibleCount >= searchResultsData.length) {
-        showMoreBtn.style.display = 'none';
-    }
-}
-
-showMoreBtn.addEventListener('click', renderSearchBatch);
 
 // TODO: Add any additional functionality you want
