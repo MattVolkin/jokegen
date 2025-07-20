@@ -21,15 +21,20 @@ let visibleCount = 0;        // Track how many results are currently shown
 const RESULTS_PER_BATCH = 5; // Number of jokes shown per click
 
 function toggleFavorite(joke, heartElement) {
+    const jokeKey = joke.id || joke.joke_text;
     const isFavorited = heartElement.classList.toggle('favorited');
     heartElement.style.color = isFavorited ? 'red' : 'black';
 
-    const existing = favoritesSection.querySelector(`[data-id="${joke.id}"]`);
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const existing = [...favoritesSection.querySelectorAll('.favorite-item')].find(el => el.dataset.key === jokeKey);
 
     if (isFavorited && !existing) {
+        favorites.push(joke);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+
         const fav = document.createElement('div');
         fav.className = 'favorite-item';
-        fav.dataset.id = joke.id;
+        fav.dataset.key = jokeKey;
         fav.style.display = 'flex';
         fav.style.alignItems = 'center';
         fav.style.justifyContent = 'space-between';
@@ -37,6 +42,8 @@ function toggleFavorite(joke, heartElement) {
         const jokeText = document.createElement('span');
         jokeText.textContent = joke.joke_text;
         jokeText.style.flex = '1';
+        jokeText.style.cursor = 'pointer';
+        jokeText.addEventListener('click', () => displayJoke(joke));
 
         const heart = document.createElement('span');
         heart.textContent = '♥';
@@ -44,8 +51,10 @@ function toggleFavorite(joke, heartElement) {
         heart.style.fontSize = '1.5rem';
         heart.style.color = 'red';
         heart.style.marginLeft = '1rem';
-
-        heart.addEventListener('click', () => toggleFavorite(joke, heart));
+        heart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(joke, e.target);
+        });
 
         fav.appendChild(jokeText);
         fav.appendChild(heart);
@@ -53,16 +62,19 @@ function toggleFavorite(joke, heartElement) {
     }
 
     if (!isFavorited && existing) {
+        favorites = favorites.filter(fav => (fav.id || fav.joke_text) !== jokeKey);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
         existing.remove();
     }
-}
+    }
 
 // Helper function to display a joke and handle audio
 function displayJoke(joke) {
     jokeDisplay.innerHTML = '';
 
     const jokeText = document.createElement('p');
-    jokeText.innerHTML = (joke.joke_text || 'No joke found.').replace(/\n/g, '<br>');
+jokeText.innerHTML = (joke.joke_text || 'No joke found.').replace(/\n/g, '<br>');
+
     jokeDisplay.appendChild(jokeText);
 
     if (joke.audio_file_path) {
@@ -82,7 +94,11 @@ function displayJoke(joke) {
         heart.style.fontSize = '1.5rem';
         heart.style.color = 'black';
         heart.style.marginLeft = '1rem';
-        heart.addEventListener('click', () => toggleFavorite(joke, heart));
+        heart.dataset.id = joke.id;
+        heart.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(joke, e.target);
+        });
 
         mediaContainer.appendChild(audio);
         mediaContainer.appendChild(heart);
@@ -118,7 +134,7 @@ function renderSearchBatch() {
             heart.style.fontSize = '1.5rem';
             heart.style.color = 'black';
             heart.style.marginLeft = '1rem';
-            heart.addEventListener('click', () => toggleFavorite(joke, heart));
+            heart.addEventListener('click', (e) => toggleFavorite(joke, e.target));
 
             mediaContainer.appendChild(audio);
             mediaContainer.appendChild(heart);
@@ -209,6 +225,18 @@ jokeIdBtn.addEventListener('click', async () => {
     } catch (err) {
         jokeDisplay.textContent = 'Failed to fetch joke by ID.';
     }
+});
+
+// Restore favorites from localStorage
+window.addEventListener('DOMContentLoaded', () => {
+    const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    savedFavorites.forEach(joke => {
+        // Create a fake heart element for toggleFavorite to mark as red
+        const dummyHeart = document.createElement('span');
+        dummyHeart.classList.add('favorited');
+        dummyHeart.style.color = 'red';
+        toggleFavorite(joke, dummyHeart);
+    });
 });
 
 // TODO: Add any additional functionality you want

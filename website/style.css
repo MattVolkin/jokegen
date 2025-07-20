@@ -7,7 +7,7 @@ body {
 }
 
 header {
-  background-color: #4caf50;
+  background-color: #0a55f8;
   color: white;
   padding: 1rem;
   text-align: center;
@@ -23,7 +23,7 @@ main {
 
 h2 {
   margin-top: 2rem;
-  color: #4caf50;
+  color: #0532f8;
 }
 
 .joke-box {
@@ -40,7 +40,7 @@ h2 {
 }
 
 button {
-  background-color: #4caf50;
+  background-color: #0400ff;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -51,7 +51,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #002aff;
 }
 
 input[type="text"] {
