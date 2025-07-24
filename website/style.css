@@ -1,46 +1,41 @@
+/* Southwestern University Theme - Consistent Gold & Black */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background: #f2f2f2;
-  color: #333;
+  color: #222; /* black */
 }
 
 header {
-  background-color: #5a8dee; /* softer blue */
-  color: white;
-}
-
-.hamburger {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: white;
-  cursor: pointer;
-  margin-right: 1rem;
+  background-color: #ffc72c; /* SU gold */
+  color: #222; /* black */
 }
 
 .header-content {
   display: flex;
   align-items: center;
   padding: 1rem 2rem;
-  background: #5a8dee;
-  box-shadow: 0 2px 8px rgba(90, 141, 238, 0.08);
+  background: #ffc72c; /* SU gold */
+  box-shadow: 0 2px 8px rgba(44, 44, 44, 0.08);
 }
 
-header h1 {
-  justify-self: center;
-  margin: 0;
-  width: 100%;
-  text-align: center;
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #222; /* black */
+  cursor: pointer;
+  margin-right: 1rem;
 }
 
 .site-title {
   flex: 1;
   text-align: center;
   margin: 0;
-  margin-left: 5.5rem; /* Adjust this value as needed */
-  color: white;
+  margin-left: 2.5rem;
+  color: #222; /* black */
   font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -56,82 +51,59 @@ main {
 
 h2 {
   margin-top: 2rem;
-  color: #3766d6; /* match hover color for headings */
+  color: #222; /* black for headings */
 }
 
 .joke-box {
-  border: 1px solid #ddd;
+  border: 1px solid #e4e3de; /* original light border */
   padding: 1rem;
   margin: 1rem 0;
-  background-color: #f9f9f9;
+  background-color: #fff; /* original white background */
   min-height: 60px;
 }
 
 #search-results .search-result {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ffc72c; /* gold */
   padding: 0.5rem 0;
 }
 
-button {
-  background-color: #4f7cf7; /* softer blue */
-  color: white;
+button,
+#search-form button {
+  background-color: #222; /* black */
+  color: #ffc72c; /* gold */
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.2rem;
   margin-top: 1rem;
   cursor: pointer;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
-button:hover {
-  background-color: #3766d6; /* slightly darker for hover */
+button:hover,
+#search-form button:hover {
+  background-color: #444; /* dark black */
 }
 
-input[type="text"] {
-  padding: 0.5rem;
-  width: calc(100% - 120px);
-  margin-right: 1rem;
+input[type="text"],
+#search-input {
+  padding: 0.5rem 1rem;
   font-size: 1rem;
+  border-radius: 20px;
+  border: 1px solid #222;
+  outline: none;
+  width: 200px;
+  background: #fff; /* original white background */
+  color: #222;
 }
 
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
+form,
 #search-form {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin: 0;
-}
-
-#search-input {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 20px; /* rounded corners */
-  border: 1px solid #ccc;
-  outline: none;
-  width: 200px;
-  background: #fff;
-}
-
-#search-form button {
-  border-radius: 20px; /* rounded corners for button */
-  margin-top: 0;
-  background-color: #3766d6;
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-#search-form button:hover {
-  background-color: #274ea3;
 }
 
 #favorites-sidebar {
@@ -140,12 +112,13 @@ form {
   left: -320px;
   width: 300px;
   height: 100%;
-  background: #fff;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  background: #fffbe6; /* light gold */
+  box-shadow: 2px 0 8px rgba(44,44,44,0.15);
   z-index: 1000;
   transition: left 0.3s;
   display: flex;
   flex-direction: column;
+  color: #222;
 }
 
 #favorites-sidebar.open {
@@ -157,8 +130,8 @@ form {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #5a8dee;
-  color: white;
+  background: #ffc72c; /* SU gold */
+  color: #222; /* black */
   font-size: 1.2rem;
 }
 
@@ -166,7 +139,7 @@ form {
   background: none;
   border: none;
   font-size: 2rem;
-  color: white;
+  color: #222; /* black */
   cursor: pointer;
 }
 
@@ -174,4 +147,12 @@ form {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
+}
+
+.favorite-item .favorited {
+  color: #ffc72c !important; /* gold heart for favorited */
+}
+
+.favorite-item span {
+  color: #222;
 }
