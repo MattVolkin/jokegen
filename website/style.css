@@ -7,10 +7,43 @@ body {
 }
 
 header {
-  background-color: #0a55f8;
+  background-color: #5a8dee; /* softer blue */
   color: white;
-  padding: 1rem;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #5a8dee;
+  box-shadow: 0 2px 8px rgba(90, 141, 238, 0.08);
+}
+
+header h1 {
+  justify-self: center;
+  margin: 0;
+  width: 100%;
   text-align: center;
+}
+
+.site-title {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  margin-left: 5.5rem; /* Adjust this value as needed */
+  color: white;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 main {
@@ -23,7 +56,7 @@ main {
 
 h2 {
   margin-top: 2rem;
-  color: #0532f8;
+  color: #3766d6; /* match hover color for headings */
 }
 
 .joke-box {
@@ -40,7 +73,7 @@ h2 {
 }
 
 button {
-  background-color: #0400ff;
+  background-color: #4f7cf7; /* softer blue */
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -51,7 +84,7 @@ button {
 }
 
 button:hover {
-  background-color: #002aff;
+  background-color: #3766d6; /* slightly darker for hover */
 }
 
 input[type="text"] {
@@ -65,4 +98,80 @@ form {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+#search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+#search-input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 20px; /* rounded corners */
+  border: 1px solid #ccc;
+  outline: none;
+  width: 200px;
+  background: #fff;
+}
+
+#search-form button {
+  border-radius: 20px; /* rounded corners for button */
+  margin-top: 0;
+  background-color: #3766d6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+#search-form button:hover {
+  background-color: #274ea3;
+}
+
+#favorites-sidebar {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+  transition: left 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+#favorites-sidebar.open {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #5a8dee;
+  color: white;
+  font-size: 1.2rem;
+}
+
+#close-sidebar {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+#favorites-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
 }

@@ -8,8 +8,26 @@
 </head>
 <body>
   <header>
-    <h1>Dad Joke Generator</h1>
+    <div class="header-content">
+      <button id="hamburger-menu" aria-label="Show favorites" class="hamburger">
+        &#9776;
+      </button>
+      <h1 class="site-title">Dad Joke Generator</h1>
+      <form id="search-form">
+        <input type="text" id="search-input" placeholder="Search jokes..." />
+        <button type="submit">Search</button>
+      </form>
+    </div>
   </header>
+
+  <!-- Favorites Sidebar -->
+  <aside id="favorites-sidebar">
+    <div class="sidebar-header">
+      <span>Favorites</span>
+      <button id="close-sidebar" aria-label="Close favorites">&times;</button>
+    </div>
+    <div id="favorites-sidebar-list"></div>
+  </aside>
 
   <main>
     <!-- Random Joke Section -->
@@ -21,30 +39,23 @@
       <label><input type="checkbox" id="autoplay-audio"> Autoplay audio</label>
     </section>
 
-    <!-- Favorites Label (optional) -->
-    <section>
-      <h2>Favorites</h2>
-      <div id="favorites-section"></div>
-    </section>
+
 
     <!-- Search Section -->
-    <section id="search-section">
+    <section id="search-section" style="display:none;">
       <h2>Search</h2>
-      <form id="search-form">
-        <input type="text" id="search-input" placeholder="Search jokes..." />
-        <button type="submit">Search</button>
-      </form>
-
       <div id="search-results"></div>
-      <button id="show-more-btn" style="display: none;">Show More Results</button>
+      <button id="show-more-btn" style="display:none;">Show More Results</button>
     </section>
+
   </main>
 
   <footer>
-    <p>&copy; 2025 JokeGen</p>
+    
   </footer>
 
   <script src="app.js"></script>
 </body>
+</html>
 
 

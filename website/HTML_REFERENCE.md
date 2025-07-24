@@ -22,7 +22,7 @@
 ### **Headers & Navigation**
 ```html
 <header>
-    <h1>JokeGen</h1>
+    <h1>JokeGen V2 cookies added</h1>
     <nav>
         <ul>
             <li><a href="#home">Home</a></li>
