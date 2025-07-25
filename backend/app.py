@@ -4,19 +4,21 @@ JokeGen Backend API Skeleton
 Connect your database to the frontend
 """
 
-from flask import Flask, jsonify, request
+
+from flask import Flask, jsonify, request 
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
 # Method 1: Add path and import
+
 import sys
 import os
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Database'))
 from database_skeleton import get_random_joke, search_jokes, get_joke_by_number
 import sqlite3
+
 
 DATABASE_PATH = os.path.join(os.path.dirname(__file__), 'jokegen.db')
 
@@ -28,7 +30,9 @@ def get_db_connection():
 def get_random_joke_endpoint():
     try:
         print("Fetching random joke...")
-        joke = get_random_joke(get_db_connection())
+        conn = get_db_connection()
+        joke = get_random_joke(conn)
+        conn.close()
         print("Joke fetched:", joke)
         # Combine setup and punchline if stored separately
         if isinstance(joke[2], list) or isinstance(joke[2], tuple):
@@ -46,20 +50,25 @@ def search_jokes_endpoint():
         term = request.args.get('term', '')
         if not term:
             return jsonify({'error': 'Search term required'}), 400
-        connection= get_db_connection()
-        jokes = search_jokes(connection,term)
-        return jsonify({'jokes':[{'joke_text':joke[2],'audio_file_path':joke[3]}for joke in jokes]})
+        conn = get_db_connection()
+        jokes = search_jokes(conn, term)
+        conn.close()
+        return jsonify({'jokes': [{'joke_text': joke[2], 'audio_file_path': joke[3]} for joke in jokes]})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/joke/<int:joke_number>', methods=['GET'])
 def get_joke_by_number_endpoint(joke_number):
     try:
-        connection = get_db_connection()        
-        joke = get_joke_by_number(connection, joke_number)        
+        conn = get_db_connection()
+        joke = get_joke_by_number(conn, joke_number)
+        conn.close()
         return jsonify({'joke_text': joke[2], 'audio_file_path': joke[3]})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=81)
+
+# Install dependencies
+# RUN pip install flask flask-cors
