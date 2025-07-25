@@ -69,6 +69,3 @@ def get_joke_by_number_endpoint(joke_number):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=81)
-
-# Install dependencies
-# RUN pip install flask flask-cors
