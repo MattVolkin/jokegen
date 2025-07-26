@@ -5,16 +5,14 @@ Connect your database to the frontend
 """
 
 
-from flask import Flask, jsonify, request 
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+import sys
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Method 1: Add path and import
-
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Database'))
 from database_skeleton import get_random_joke, search_jokes, get_joke_by_number
 import sqlite3
@@ -29,19 +27,17 @@ def get_db_connection():
 @app.route('/random', methods=['GET'])
 def get_random_joke_endpoint():
     try:
-        print("Fetching random joke...")
         conn = get_db_connection()
         joke = get_random_joke(conn)
         conn.close()
-        print("Joke fetched:", joke)
-        # Combine setup and punchline if stored separately
         if isinstance(joke[2], list) or isinstance(joke[2], tuple):
             joke_text = '\n'.join(joke[2])
         else:
             joke_text = joke[2]
-        return jsonify({'joke_text': joke_text, 'audio_file_path': joke[3]})
+        audio_filename = os.path.basename(joke[3]) if joke[3] else None
+        audio_file_path = f"Joke audio/{audio_filename}" if audio_filename else None
+        return jsonify({'joke_text': joke_text, 'audio_file_path': audio_file_path})
     except Exception as e:
-        print("Error in /random:", e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/search', methods=['GET'])
@@ -68,7 +64,7 @@ def get_joke_by_number_endpoint(joke_number):
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=81)
+    app.run(debug=True, port=5000)
 
 # Install dependencies
 # RUN pip install flask flask-cors
