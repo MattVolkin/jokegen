@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JokeGenApp</string>
+    <string name="random_joke">Random Joke</string>
+    <string name="search">Search</string>
+    <string name="show_more">Show More Results</string>
+    <string name="favorites">Favorites</string>
+    <string name="search_hint">Search jokes...</string>
+    <string name="play_audio">Play Audio</string>
+</resources> 
