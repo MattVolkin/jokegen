@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     
     // Retrofit setup
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:5000/") // Use 10.0.2.2 for Android emulator to access localhost
+        .baseUrl("http://192.168.6.35:5000/") // Your computer's IP address
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     
